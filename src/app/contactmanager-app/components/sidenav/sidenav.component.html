@@ -7,9 +7,9 @@
       <span>Contacts</span>
     </mat-toolbar>
     <mat-list>
-      <mat-list-item *ngFor="let user of users | async">
+      <mat-list-item [style.background-color]="selectedUser===user.id? 'gray' : ''" *ngFor="let user of users | async">
         <h3 matLine>
-          <a  (click)="onClick(sidenav)" style="text-decoration: none;color: white" matLine [routerLink]="['/contactmanager',user.id]">
+          <a  (click)="onClick(sidenav,user.id!)" style="text-decoration: none;color: white" matLine [routerLink]="['/contactmanager',user.id]">
             <mat-icon svgIcon="{{user.avatar}}"></mat-icon>
             {{user.name}}
           </a>

@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from "@angular/material/sidenav";
 import {BreakpointObserver, Breakpoints, BreakpointState} from "@angular/cdk/layout";
-import {Observable} from "rxjs";
+import {first, Observable, tap} from "rxjs";
 import {UserService} from "../../service/user.service";
 import {User} from "../../models/user/user";
 import {Router} from "@angular/router";
@@ -14,9 +14,10 @@ const SMALL_WIDTH_BREAKPOINT=720;
 export class SidenavComponent implements OnInit {
   isScreenSmall:boolean=false;
   users:Observable<User[]>;
-
+  selectedUser:Number| undefined;
   constructor(private router:Router,private breakpointObserver:BreakpointObserver,private userService:UserService) {
 
+    this.selectedUser=0;
 this.users=new Observable<User[]>()
   }
 
@@ -33,6 +34,8 @@ this.users=new Observable<User[]>()
       })
     this.users=this.userService.users
     this.userService.loadAll()
+    this.users.subscribe(next=>{this.selectedUser=next[0].id})
+
 
 
   }
@@ -40,7 +43,8 @@ this.users=new Observable<User[]>()
   //ali moramo u kodu da imamo #sidenav
   //@ViewChild(MatSidenav) sidenav:MatSidenav;
 
-  onClick(sidenav: MatSidenav) {
+  onClick(sidenav: MatSidenav, id: number ) {
+    this.selectedUser=id;
     if(this.isScreenSmall){
       sidenav.close()
     }
